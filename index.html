@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Tracker</title>
+    <link rel="icon" href="./Notes/IMG/favicon.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        #content {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+    <!-- Load Marked.js -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <h1>Content Tracker</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Content</th>
+                <th>Date Added</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Day 1</td>
+                <td>Day 1 Content Review</td>
+                <td>August 23, 2024</td>
+                <td><a href="#" onclick="loadMarkdown('Notes/Day1.md')">View</a></td>
+            </tr>
+            <tr>
+                <td>Day 2</td>
+                <td>Day 2 Content Review</td>
+                <td>August 24, 2024</td>
+                <td><a href="#" onclick="loadMarkdown('Notes/Day2.md')">View</a></td>
+            </tr>
+            <tr>
+                <td>Day 3</td>
+                <td>Day 3 Content Review</td>
+                <td>August 25, 2024</td>
+                <td><a href="#" onclick="loadMarkdown('Notes/Day3.md')">View</a></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div id="content"></div>
+
+    <script>
+        function loadMarkdown(file) {
+            fetch(file)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    document.getElementById('content').innerHTML = marked(text);
+                })
+                .catch(error => console.error('Error loading markdown:', error));
+        }
+    </script>
+</body>
+</html>
