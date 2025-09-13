@@ -1,0 +1,46 @@
+name: Semantic Release for Terraform
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  semantic-release:
+    name: Run Semantic Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 📦 Install semantic-release and plugins
+        run: |
+          npm install semantic-release \
+                      @semantic-release/commit-analyzer \
+                      @semantic-release/release-notes-generator \
+                      @semantic-release/changelog \
+                      @semantic-release/git \
+                      @semantic-release/github \
+                      --no-save
+
+      - name: 🚀 Run semantic-release
+        run: |
+          npx semantic-release \
+            --branches main \
+            --tag-format "v\${version}" \
+            --plugins @semantic-release/commit-analyzer \
+                      @semantic-release/release-notes-generator \
+                      @semantic-release/changelog \
+                      @semantic-release/git \
+                      @semantic-release/github
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: 🧹 Optional cleanup
+        run: rm -f CHANGELOG.md
