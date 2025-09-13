@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: 🧾 Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Required for semantic-release to access full Git history
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v3
@@ -28,6 +30,12 @@ jobs:
                       @semantic-release/git \
                       @semantic-release/github \
                       --no-save
+
+      - name: 🛠 Configure Git identity
+        run: |
+          git config --global user.name "semantic-release-bot"
+          git config --global user.email "semantic-release@users.noreply.github.com"
+          git remote set-url origin https://${GH_TOKEN}@github.com/${{ github.repository }}
 
       - name: 🚀 Run semantic-release
         run: |
