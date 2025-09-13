@@ -7,14 +7,13 @@ on:
 
 jobs:
   semantic-release:
-    name: Run Semantic Release
     runs-on: ubuntu-latest
 
     steps:
       - name: 🧾 Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Required for semantic-release to access full Git history
+          fetch-depth: 0  # Required for semantic-release
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v3
@@ -31,13 +30,11 @@ jobs:
                       @semantic-release/github \
                       --no-save
 
-      - name: 🛠 Configure Git identity
+      - name: 🛠 Configure Git identity and remote
         run: |
           git config --global user.name "semantic-release-bot"
           git config --global user.email "semantic-release@users.noreply.github.com"
           git remote set-url origin https://${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: 🚀 Run semantic-release
         run: |
